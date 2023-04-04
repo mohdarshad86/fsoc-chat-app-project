@@ -1,15 +1,29 @@
 const userModel = require('../models/userModel')
 
-const createUser = async (req, res) => {
+const addUser = async (req, res) => {
     try {
         const data = req.body
+        const userExist = await userModel.findOne({ email: data.email })
 
-        const userData = await userModel.create(data)
+        if (userExist) return res.status(500).send({ status: false, msg: 'User Already exist, LogIn Please!' })
 
-        return res.status(201).send({ status: true, data: userData })
+        const newUser = new userModel(data)
+        await newUser.save()
+
+        return res.status(201).send({ status: true, data: newUser })
     } catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
     }
 }
 
-module.exports = { createUser }
+const getUser = async (req, res) => {
+    try {
+        let allUser = await userModel.find({})
+
+        return res.status(200).send({ status: true, data: allUser })
+    } catch (error) {
+
+    }
+}
+
+module.exports = { addUser }

@@ -2,37 +2,37 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 const userSchema = new mongoose.Schema({
-    userName: {
+
+    name: {
         type: String,
         required: true
     },
-    // userId: {
-    //     type: ObjectId,
-    //     required: true
-    // },
     email: {
         type: String,
-        unique: true,
+        required: true
+    },
+    password:{
+        type:String,
     },
     phone: {
         type: String,
+        required: true
+    },
+    pic: {
+        type: String,
         required: true,
-        unique: true,
+        default:
+        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
-    password: {
-        type: String,
-        min: 8,
-        max: 15
-    },
-    Image: {
-        type: String,
-        // required: true,
-        trim: true
-    },
-    isDeleted: {
-        type: Boolean,
-        default: false
+    isAdmin:{
+        type:Boolean,
+        default:false
     }
+
+    // isDeleted: {
+    //     type: Boolean,
+    //     default: false
+    // }
 }, { timestamps: true })
 
 module.exports = mongoose.model('user', userSchema)

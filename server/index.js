@@ -3,13 +3,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors')
-const colors=require('colors')
+const colors = require('colors')
 const route = require('./routes/route');
-const {notFound, errorHandler}=require('./midllewares/errors')
+const { notFound, errorHandler } = require('./midllewares/errors')
 
 const PORT = process.env.PORT || 3001
 
-app.use(cors())
+// app.use(cors())
 
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
@@ -19,10 +19,10 @@ mongoose.connect("mongodb+srv://mohdarshad86:Arshad86@cluster0.r4p7rwf.mongodb.n
     .then(() => { console.log("MongoDB is connected".cyan.underline) })
     .catch((err) => { console.log(`Error:${err.message}`.red.bold) });
 
-
+app.use(cors())
 app.use("/api/user", route);
-app.use(notFound)
-app.use(errorHandler)
+// app.use(notFound)
+// app.use(errorHandler)
 
 app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`.yellow.bold);

@@ -4,6 +4,7 @@ const generateToken = require('../config/generateToekn')
 const register = async (req, res) => {
     try {
         const data = req.body
+        console.log(req.body)
         const { name, phone, email, password, pic } = data
 
         if (!name || !phone || !email || !password) {
@@ -17,18 +18,19 @@ const register = async (req, res) => {
         // const newUser = new userModel(data)
         // await newUser.save()
 
-        const newUser = await userModel.create(data).toObject()
+        const newUser = await userModel.create(data)
 
         if (!newUser) {
             return res.status(400).send({ status: false, msg: 'Failed to create the User' })
         }
 
         let user = {
-            ...newUser,
-            token: generateToken(newUser._id)
+            ...newUser._doc,
+            token: generateToken(newUser._doc._id)
         }
         return res.status(201).json({ status: true, data: user })
     } catch (error) {
+        console.log(error.message);
         return res.status(500).send({ status: false, msg: error.message })
     }
 }
@@ -59,4 +61,22 @@ const Login = async (req, res) => {
     }
 }
 
-module.exports = { register, Login }
+//api/user?search=batsy (query) //asyncHandler
+const allUsers = async (req, res) => {
+    try {
+        const keyword = req.query.search ? {
+            $or: [
+                { name: { $regex: req.query.search, $options: "i" } },
+                { email: { $regex: req.query.search, $options: "i" } },
+            ]
+        } : {};
+        
+        const users = await userModel.find(keyword).find({ _id: { $ne: req.user._id } })
+
+        return res.status(200).send(users)
+    } catch (error) {
+        return res.status(500).send({ status: false, msg: error.message })
+    }
+}
+
+module.exports = { register, Login, allUsers }

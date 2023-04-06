@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const userController = require('../controllers/userController')
+const autherise = require('../midllewares/authMiddleware')
 let { chats } = require('../database/data')
 
 // router.post('/api/chat', userController.addUser)
@@ -16,11 +17,13 @@ let { chats } = require('../database/data')
 // })
 
 //user
-
-// router.get('/login', userController.login)
-
-router.route('/').post(userController.register)
+//SIGNUP
+// router.route('/').post(userController.register)
+router.post('/', userController.register)
+//LOGIN
 router.post('/login', userController.Login)
+//GET ALL USER
+router.get('/', autherise.auth, userController.allUsers)
 
 router.all('*', (req, res) => {
     return res.status(400).send('Invalid URL')

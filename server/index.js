@@ -20,7 +20,16 @@ mongoose.connect("mongodb+srv://mohdarshad86:Arshad86@cluster0.r4p7rwf.mongodb.n
     .catch((err) => { console.log(`Error:${err.message}`.red.bold) });
 
 app.use(cors())
+
+
+app.use("/", route);
+/*
+//user
 app.use("/api/user", route);
+//Chat
+app.use('/api/chat' route)
+*/
+
 // app.use(notFound)
 // app.use(errorHandler)
 

@@ -43,7 +43,7 @@ const createChat = async (req, res) => {
             return res.status(200).json(FullChat);
         } catch (error) {
             console.log(error.message);
-            return res.status(500).send({ status: false, msg: error.message })
+            return res.status(500).send({ status: false, message: error.message })
         }
     }
 };
@@ -64,7 +64,7 @@ const getChats = async (req, res) => {
             });
     } catch (error) {
         console.log(error.message);
-        return res.status(500).send({ status: false, msg: error.message })
+        return res.status(500).send({ status: false, message: error.message })
     }
 };
 
@@ -97,7 +97,7 @@ const createGroup = async (req, res) => {
         return res.status(200).json(fullGroupChat);
     } catch (error) {
         console.log(error.message);
-        return res.status(500).send({ status: false, msg: error.message })
+        return res.status(500).send({ status: false, message: error.message })
     }
 };
 
@@ -110,13 +110,13 @@ const renameGroup = async (req, res) => {
             .populate("groupAdmin", "-password");
 
         if (!newName) {
-            return res.status(400).send({ status: false, msg: 'Chat not found' })
+            return res.status(400).send({ status: false, message: 'Chat not found' })
         } else {
             return res.status(200).json(newName);
         }
     } catch (error) {
         console.log(error.message);
-        return res.status(500).send({ status: false, msg: error.message })
+        return res.status(500).send({ status: false, message: error.message })
     }
 };
 
@@ -125,18 +125,28 @@ const addUsersToGroup = async (req, res) => {
         const { chatId, userId } = req.body;
 
         // check for the Admin
+        const groupChatExists = await chatModel.findOne({ _id: chatId }); // Find if group chat exists.
+
+        if (!groupChatExists) { // Error: No group chat with the given id exists.
+            return res.status(400).json({ status: false, message: "Invalid group chat Id." });
+        }
+
+        if (!groupChatExists.groupAdmin.equals(req.user._id)) { // Error: Requester is not the admin of this group.
+            return res.status(401).json({ status: false, message: "Only the admin can add people to the group." });
+        }
+
         const addedUser = await chatModel.findByIdAndUpdate(chatId, { $push: { users: userId }, }, { new: true, })
             .populate("users", "-password")
             .populate("groupAdmin", "-password");
 
         if (!addedUser) {
-            return res.status(400).send({ status: false, msg: 'Chat not found' })
+            return res.status(400).send({ status: false, message: 'Chat not found' })
         } else {
             return res.status(200).json(addedUser);
         }
     } catch (error) {
         console.log(error.message);
-        return res.status(500).send({ status: false, msg: error.message })
+        return res.status(500).send({ status: false, message: error.message })
     }
 };
 
@@ -145,18 +155,28 @@ const removeUsersFromGroup = async (req, res) => {
         const { chatId, userId } = req.body;
 
         // check for the Admin
+        const groupChatExists = await Chat.findOne({ _id: chatId }); // Find if group chat exists.
+
+        if (!groupChatExists) { // Error: No group chat with the given id exists.
+            return res.status(400).json({ status: false, message: "Invalid group chat Id." });
+        }
+
+        if (!groupChatExists.groupAdmin.equals(req.user._id)) { // Error: Requester is not the admin of this group.
+            return res.status(401).json({ status: false, message: "Only the admin can remove people from the group." });
+        }
+
         const removeUser = await chatModel.findByIdAndUpdate(chatId, { $pull: { users: userId }, }, { new: true, })
             .populate("users", "-password")
             .populate("groupAdmin", "-password");
 
         if (!removeUser) {
-            return res.status(400).send({ status: false, msg: 'Chat not found' })
+            return res.status(400).send({ status: false, message: 'Chat not found' })
         } else {
             return res.status(200).json(removeUser);
         }
     } catch (error) {
         console.log(error.message);
-        return res.status(500).send({ status: false, msg: error.message })
+        return res.status(500).send({ status: false, message: error.message })
     }
 };
 module.exports = { createChat, getChats, createGroup, renameGroup, addUsersToGroup, removeUsersFromGroup }

@@ -10,7 +10,7 @@ router.post('/api/user', userController.register)
 //LOGIN
 router.post('/api/user/login', userController.Login)
 //GET ALL USER
-router.get('/api/user', authorise.auth, userController.allUsers)
+router.get('/api/users', authorise.auth, userController.allUsers)
 
 // chat
 //ACCESS CHAT

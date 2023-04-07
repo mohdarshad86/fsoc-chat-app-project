@@ -4,7 +4,6 @@ const generateToken = require('../config/generateToekn')
 const register = async (req, res) => {
     try {
         const data = req.body
-        console.log(req.body)
         const { name, phone, email, password, pic } = data
 
         if (!name || !phone || !email || !password) {
@@ -28,7 +27,7 @@ const register = async (req, res) => {
             ...newUser._doc,
             token: generateToken(newUser._doc._id)
         }
-        return res.status(201).json({ status: true, data: user })
+        return res.status(201).json(user)
     } catch (error) {
         console.log(error.message);
         return res.status(500).send({ status: false, msg: error.message })
@@ -48,9 +47,9 @@ const Login = async (req, res) => {
             ...userExist._doc,
             token: generateToken(userExist._id)
         }
-
+        // res.setHeaders('token', user.token)
         if (userExist) { //&& (await userExist.matchPassword(password))
-            return res.status(200).json({ status: true, data: user })
+            return res.status(200).json(user)
         }
         else {
             return res.status(400).json({ status: false, msg: 'Invalid Credentials' })
@@ -70,7 +69,7 @@ const allUsers = async (req, res) => {
                 { email: { $regex: req.query.search, $options: "i" } },
             ]
         } : {};
-        
+
         const users = await userModel.find(keyword).find({ _id: { $ne: req.user._id } })
 
         return res.status(200).send(users)

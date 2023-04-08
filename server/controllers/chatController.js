@@ -154,7 +154,7 @@ const removeUsersFromGroup = async (req, res) => {
         const { chatId, userId } = req.body;
 
         // check for the Admin
-        const groupChatExists = await Chat.findOne({ _id: chatId }); // Find if group chat exists.
+        const groupChatExists = await chatModel.findOne({ _id: chatId }); // Find if group chat exists.
 
         if (!groupChatExists) { // Error: No group chat with the given id exists.
             return res.status(400).json({ status: false, message: "Invalid group chat Id." });

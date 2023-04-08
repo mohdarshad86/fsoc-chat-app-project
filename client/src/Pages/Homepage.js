@@ -20,7 +20,7 @@ const Homepage = () => {
 
   return <Container maxW="xl" centerContent>
     <Box
-      d="flex"
+      display="flex"
       justifyContent="centre"
       p={3}
       bg={"white"}

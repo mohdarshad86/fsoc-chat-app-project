@@ -4,9 +4,9 @@ import { useHistory } from "react-router-dom";
 const ChatContext = createContext();
 
 const ChatProvider = ({ children }) => {
-    const [user, setUser] = useState();
+  const [user, setUser] = useState();
   const [selectedChat, setSelectedChat] = useState();
-//   const [notification, setNotification] = useState([]);
+  //   const [notification, setNotification] = useState([]);
   const [chats, setChats] = useState();
 
   const history = useHistory();
@@ -15,15 +15,15 @@ const ChatProvider = ({ children }) => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
 
-    if (!userInfo) history.push("/");
+    if (!userInfo) history?.push("/");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history]);
 
   return (
     <ChatContext.Provider
       value={{
-          user,
-          setUser,
+        user,
+        setUser,
         selectedChat,
         setSelectedChat,
         // notification,

@@ -11,20 +11,18 @@ const auth = async (req, res, next) => {
             //token = Bearer "erfvde456yhgbniu"
             token = req.headers.authorization.split(' ')[1]
 
-            //decode id
+            //decode tpken and verify id
             const decoded = jwt.verify(token, "secret-key")
-            
+
             req.user = await userModel.findById(decoded.id).select('-password')
 
             next()
         } catch (error) {
-            res.status(401)
-            throw new Error("Not Autherized")
+            return res.status(401).send("Not Authorised")
         }
     }
     if (!token) {
-        res.status(401)
-        throw new Error("Not Autherized")
+        return res.status(401).send("Not Authorised Token")
     }
 }
 

@@ -10,10 +10,7 @@ const errorHandler = (err, req, res, next) => {
 
     // res.status(statusCode)
 
-    return res.status(statusCode).json({
-        message: err.message,
-        // stack: process.env.NODE_ENV === 'production' ? null : err.stack
-    })
+    return res.status(statusCode).json({message: err.message })
 }
 
 module.exports = { notFound, errorHandler }

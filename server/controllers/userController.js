@@ -14,9 +14,6 @@ const register = async (req, res) => {
 
         if (userExist) return res.status(400).send({ status: false, msg: 'User Already exist, LogIn Please!' })
 
-        // const newUser = new userModel(data)
-        // await newUser.save()
-
         const newUser = await userModel.create(data)
 
         if (!newUser) {

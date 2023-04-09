@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const userController = require('../controllers/userController')
 const chatController = require('../controllers/chatController')
+const messageController = require('../controllers/messageController')
 const authorise = require('../midllewares/authMiddleware')
 
 //user
@@ -26,7 +27,11 @@ router.put('/api/chat/add-group', authorise.auth, chatController.addUsersToGroup
 //REMOVE USER TO GROUP
 router.put('/api/chat/remove-group', authorise.auth, chatController.removeUsersFromGroup)
 
-
+//messages
+//SEND/POST MESSAGES
+router.post('/api/message', authorise.auth, messageController.sendMessage)
+//FETCH MESSAGES
+router.get('/api/message/:chatId', authorise.auth, messageController.allMessage)
 
 router.all('*', (req, res) => {
     return res.status(400).send('Invalid URL')

@@ -28,7 +28,7 @@ const sendMessage = async (req, res) => {
             select: "name pic email"
         })
 
-        await chatModel.findByIdAndUpdate(req.body.chatId, {
+        await chatModel.findByIdAndUpdate(chatId, {
             latestMessage: message
         })
 

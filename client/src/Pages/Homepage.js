@@ -12,8 +12,8 @@ const Homepage = () => {
     const user = JSON.parse(localStorage.getItem('userInfo'))
 
     if (user) {
-      // history.push('/chats')
-      history.push('/')
+      history.push('/chats')
+      // history.push('/')
     }
 
   }, [history]);

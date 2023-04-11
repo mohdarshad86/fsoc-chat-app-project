@@ -6,16 +6,19 @@ const ChatContext = createContext();
 const ChatProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [selectedChat, setSelectedChat] = useState();
-  //   const [notification, setNotification] = useState([]);
+  const [notification, setNotification] = useState([]);
   const [chats, setChats] = useState();
 
   const history = useHistory();
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    setUser(userInfo);
+    async function fetchData() {
+      const userInfo = await JSON.parse(localStorage.getItem("userInfo"));
+      setUser(userInfo);
 
-    if (!userInfo) history?.push("/");
+      if (!userInfo) history?.push("/");
+    }
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history]);
 
@@ -26,8 +29,8 @@ const ChatProvider = ({ children }) => {
         setUser,
         selectedChat,
         setSelectedChat,
-        // notification,
-        // setNotification,
+        notification,
+        setNotification,
         chats,
         setChats,
       }}

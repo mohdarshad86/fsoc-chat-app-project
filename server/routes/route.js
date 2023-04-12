@@ -3,7 +3,7 @@ const userController = require('../controllers/userController')
 const chatController = require('../controllers/chatController')
 const messageController = require('../controllers/messageController')
 const authorise = require('../midllewares/authMiddleware')
-
+const otp = require('../midllewares/otpVerification')
 //user
 //SIGNUP
 // router.route('/').post(userController.register)
@@ -32,6 +32,12 @@ router.put('/api/chat/remove-group', authorise.auth, chatController.removeUsersF
 router.post('/api/message', authorise.auth, messageController.sendMessage)
 //FETCH MESSAGES
 router.get('/api/message/:chatId', authorise.auth, messageController.allMessage)
+
+//otp verify
+//GENERATE OTP
+router.post('/api/user/sendOTP', otp.sendOTP)
+//VERIFY OTP
+router.post('/api/user/verifyOTP', otp.verifyOTP)
 
 router.all('*', (req, res) => {
     return res.status(400).send('Invalid URL')

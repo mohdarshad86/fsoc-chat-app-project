@@ -6,9 +6,8 @@ const register = async (req, res) => {
         const data = req.body
         const { name, phone, email, password, pic } = data
 
-        if (!name || !phone || !email || !password) {
-            return res.status(400).send("Please send all the require field")
-        }
+        if (!name || !phone || !email || !password) 
+            return res.status(400).send("Please send all the require field")       
 
         const userExist = await userModel.findOne({ email: data.email })
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Box, Container, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
-import Login from '../components/authentication/Login'
-import SignUp from '../components/authentication/SignUp'
+import Login from '../components/Authentication/Login'
+import SignUp from '../components/Authentication/SignUp'
 import { useHistory } from 'react-router-dom'
 
 const Homepage = () => {

@@ -3,6 +3,7 @@ const otpModel = require('../models/otpModel')
 const otpGenerator = require('otp-generator');
 const userModel = require('../models/userModel')
 const generateToken = require('../config/generateToekn')
+let validateMobile = /^[6-9][0-9]{9}$/;
 
 // generate an OTP and send it to the specified phone number
 const sendOTP = async (req, res) => {
@@ -45,6 +46,9 @@ const verifyOTP = async (req, res) => {
   try {
     
     const { phone, enteredOTP } = req.body;
+
+    if (!validateMobile.test(phone))
+      return res.status(400).send({ status: false, message: "Please enter valid mobile number" });
     // compare the OTP received from the user with the generated OTP
     const getOtp = await otpModel.findOne({ phone: phone })
     

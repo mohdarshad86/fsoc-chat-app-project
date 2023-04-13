@@ -126,7 +126,7 @@ const Login = () => {
         setLoading(true);
         if (!email || !password) {
             toast({
-                title: "Please Fill all the Feilds",
+                title: "Please Fill all the mendatory Feilds",
                 status: "warning",
                 duration: 5000,
                 isClosable: true,

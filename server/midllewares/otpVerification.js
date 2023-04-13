@@ -8,6 +8,10 @@ const generateToken = require('../config/generateToekn')
 const sendOTP = async (req, res) => {
   try {
     const { phone } = req.body;
+
+    if (!validateMobile.test(phone))
+      return res.status(400).send({ status: false, message: "Please enter valid mobile number" });
+
     let userExist = await userModel.findOne({ phone }).select({ password: 0 })
 
     if (!userExist) return res.status(400).json({ status: false, message: 'Invalid Credentials' })
@@ -56,7 +60,7 @@ const verifyOTP = async (req, res) => {
         token: generateToken(userExist._id)
       }
       console.log('user', user);
-      // res.setHeaders('token', user.token)
+
       if (userExist) { //&& (await userExist.matchPassword(password))
         return res.status(200).json(user)
       }
@@ -64,7 +68,7 @@ const verifyOTP = async (req, res) => {
         return res.status(400).json({ status: false, message: 'Invalid Credentials' })
       }
     } else {
-      return res.status(400).json({ message: 'Invalid OTP' });
+      return res.status(400).json({status:false, message: 'Invalid OTP' });
     }
 
   } catch (error) {

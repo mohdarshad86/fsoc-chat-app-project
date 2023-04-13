@@ -4,7 +4,7 @@ const userModel = require('../models/userModel');
 
 const sendMessage = async (req, res) => {
     const { content, chatId, files } = req.body
-    console.log(req.body);
+
     if (!(content || files) || !chatId)
         return res.status(400).send("Invalid data passed into request");
 
@@ -21,7 +21,6 @@ const sendMessage = async (req, res) => {
     try {
         var message = await messageModel.create(newMessage)
 
-        //
         message = await message.populate('sender', 'name pic files')
         message = await message.populate('chat')
         message = await userModel.populate(message, {

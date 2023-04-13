@@ -80,7 +80,7 @@ const GroupChatModal = ({ children }) => {
     const handleSubmit = async () => {
         if (!groupChatName || !selectedUsers) {
             toast({
-                title: "Please fill all the feilds",
+                title: "Please fill all the mendatory Feilds",
                 status: "warning",
                 duration: 5000,
                 isClosable: true,

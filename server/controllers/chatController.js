@@ -4,10 +4,8 @@ const userModel = require('../models/userModel')
 const createChat = async (req, res) => {
     const { userId } = req.body;
 
-    if (!userId) {
-        console.log("UserId param not sent");
+    if (!userId)
         return res.status(400).send("UserId param not present")
-    }
 
     var isChat = await chatModel.find({
         isGroupChat: false,
@@ -69,14 +67,13 @@ const getChats = async (req, res) => {
 
 const createGroup = async (req, res) => {
     if (!req.body.users || !req.body.name)
-        return res.status(400).send({ message: "Please Fill all the feilds" });
+        return res.status(400).send({ message: "Please Fill all the mendatory Feilds" });
 
     //The frondend is gonna send stringify format of Array so we need to parse it
     var users = JSON.parse(req.body.users);
 
     if (users.length < 2)
-        return res.status(400).send("More than 2 users are required to form a group chat");
-
+        return res.status(400).send({ status: false, message: "More than 2 users are required to form a group chat" });
 
     users.push(req.user);
 

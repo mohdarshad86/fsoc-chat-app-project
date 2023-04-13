@@ -1,5 +1,7 @@
 const userModel = require('../models/userModel')
 const generateToken = require('../config/generateToekn')
+const validator = require("validator");
+let validateMobile = /^[6-9][0-9]{9}$/;
 
 const register = async (req, res) => {
     try {
@@ -9,8 +11,17 @@ const register = async (req, res) => {
         if (!name || !phone || !email || !password)
             return res.status(400).send({ status: false, message: "Please send all the require field" })
 
+        if (!validateMobile.test(phone))
+            return res.status(400).send({ status: false, message: "Please enter valid mobile number" });
+
+        if (!validator.isEmail(email.trim()))
+            return res.status(400).send({ status: false, message: "Please enter valid email" });
+
+        if (password.length < 6 || password.length > 15)
+            return res.status(400).send({ status: false, message: "password length must be 6 to 15" });
+
         const userExist = await userModel.findOne({ $or: [{ email: email }, { phone: phone }] })
-        
+
         if (userExist) return res.status(400).send({ status: false, message: 'User Already exist, LogIn Please!' })
 
         const newUser = await userModel.create(data)
@@ -35,7 +46,13 @@ const Login = async (req, res) => {
         let data = req.body
         let { email, password } = data
 
-        let userExist = await userModel.findOne({ email }).select({ password: 0 })
+        if (!validator.isEmail(email.trim()))
+            return res.status(400).send({ status: false, message: "Please enter valid email" });
+
+        if (password.length < 6 || password.length > 15)
+            return res.status(400).send({ status: false, message: "password length must be 6 to 15" });
+
+        let userExist = await userModel.findOne({ email })
 
         if (!userExist) return res.status(400).json({ status: false, message: 'Invalid Credentials' })
 
@@ -43,8 +60,10 @@ const Login = async (req, res) => {
             ...userExist._doc,
             token: generateToken(userExist._id)
         }
-        // res.setHeaders('token', user.token)
-        if (userExist) { //&& (await userExist.matchPassword(password))
+
+        delete user.password
+
+        if (userExist && (await userExist.matchPassword(password))) {
             return res.status(200).json(user)
         }
         else {
@@ -56,7 +75,6 @@ const Login = async (req, res) => {
     }
 }
 
-//api/user?search=batsy (query) //asyncHandler
 const allUsers = async (req, res) => {
     try {
         const keyword = req.query.search ? {

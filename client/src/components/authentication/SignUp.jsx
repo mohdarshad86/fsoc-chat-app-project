@@ -23,7 +23,7 @@ const SignUp = () => {
         setPicLoading(true);
         if (!name || !email || !phone || !password || !confirmpassword) {
             toast({
-                title: "Please Fill all the Feilds",
+                title: "Please Fill all the mendatory Feilds",
                 status: "warning",
                 duration: 5000,
                 isClosable: true,
@@ -69,7 +69,9 @@ const SignUp = () => {
             localStorage.setItem("userInfo", JSON.stringify(data));
             setPicLoading(false);
             history.push("/chats");
+            window.location.reload();
         } catch (error) {
+            console.log(error);
             toast({
                 title: "Error Occured!",
                 description: error.response.data.message,

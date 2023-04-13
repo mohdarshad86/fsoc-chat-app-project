@@ -47,8 +47,7 @@ const verifyOTP = async (req, res) => {
     const { phone, enteredOTP } = req.body;
     // compare the OTP received from the user with the generated OTP
     const getOtp = await otpModel.findOne({ phone: phone })
-    console.log("getOtp", getOtp);
-    //MOMIN
+    
     let userExist = await userModel.findOne({ phone }).select({ password: 0 })
     
     if (!userExist) return res.status(400).json({ status: false, message: 'Invalid Credentials' })

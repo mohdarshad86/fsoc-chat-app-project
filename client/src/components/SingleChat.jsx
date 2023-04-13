@@ -26,6 +26,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
   const [pic, setPic] = useState()
+  // eslint-disable-next-line
   const [picLoading, setPicLoading] = useState(false);
   const inputFileRef = useRef()
   const toast = useToast();

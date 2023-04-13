@@ -69,7 +69,7 @@ const SignUp = () => {
             localStorage.setItem("userInfo", JSON.stringify(data));
             setPicLoading(false);
             history.push("/chats");
-            window.location.reload();
+             window.location.reload();
         } catch (error) {
             console.log(error);
             toast({

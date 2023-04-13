@@ -48,7 +48,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         },
       };
       const { data } = await axios.get(`/api/users?search=${search}`, config);
-      console.log(data);
+
       setSearchResult(data);
       setLoading(false);
     } catch (error) {
@@ -83,7 +83,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         config
       );
 
-      console.log(data._id);
       // setSelectedChat("");
       //set new updated data
       setSelectedChat(data);

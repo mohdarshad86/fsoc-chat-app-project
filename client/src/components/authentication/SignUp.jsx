@@ -42,7 +42,6 @@ const SignUp = () => {
             });
             return;
         }
-        console.log(name, email, password, phone, pic);
         try {
             const config = {
                 headers: {
@@ -58,7 +57,7 @@ const SignUp = () => {
                     phone
                 },
                 config);
-            console.log(data);
+
             toast({
                 title: "Registration Successful",
                 status: "success",
@@ -71,7 +70,6 @@ const SignUp = () => {
             history.push("/chats");
              window.location.reload();
         } catch (error) {
-            console.log(error);
             toast({
                 title: "Error Occured!",
                 description: error.response.data.message,
@@ -96,7 +94,7 @@ const SignUp = () => {
             });
             return;
         }
-        console.log(pics);
+
         if (pics.type === "image/jpeg" || pics.type === "image/png") {
             const data = new FormData();
             data.append("file", pics);
@@ -109,7 +107,7 @@ const SignUp = () => {
                 .then((res) => res.json())
                 .then((data) => {
                     setPic(data.url.toString());
-                    console.log(data.url.toString());
+                    // console.log(data.url.toString());
                     setPicLoading(false);
                 })
                 .catch((err) => {

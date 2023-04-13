@@ -19,7 +19,7 @@ const MyChats = ({ fetchAgain }) => {
   const toast = useToast();
 
   const fetchChats = async () => {
-    console.log(user.token);
+    
     try {
 
       const config = {
@@ -29,7 +29,7 @@ const MyChats = ({ fetchAgain }) => {
       };
 
       const { data } = await axios.get("/api/chat", config);
-      console.log(data);
+      
       setChats(data);
     } catch (error) {
       toast({

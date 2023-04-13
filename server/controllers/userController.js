@@ -36,7 +36,7 @@ const register = async (req, res) => {
         }
         return res.status(201).json(user)
     } catch (error) {
-        console.log(error.message);
+
         return res.status(500).send({ status: false, message: error.message })
     }
 }

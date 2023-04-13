@@ -38,7 +38,7 @@ const Login = () => {
                     config
                 );
 
-                console.log(JSON.stringify(data));
+                // console.log(JSON.stringify(data));
                 setIsOTPSend(data.status);
             } catch (error) {
                 toast({
@@ -86,7 +86,7 @@ const Login = () => {
                     config
                 );
 
-                console.log(JSON.stringify(data));
+                // console.log(JSON.stringify(data));
                 toast({
                     title: "Login Successful",
                     status: "success",
@@ -136,7 +136,6 @@ const Login = () => {
             return;
         }
 
-        // console.log(email, password);
         try {
             const config = {
                 headers: {

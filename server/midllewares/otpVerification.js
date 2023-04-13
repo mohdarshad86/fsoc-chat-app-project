@@ -35,7 +35,7 @@ const sendOTP = async (req, res) => {
     // send the OTP to the phone number using your preferred method, such as SMS or email
     res.status(200).json({ status: true, message: `OTP sent to ${phone}` });
   } catch (error) {
-    console.log(error.message);
+
     return res.status(500).send({ status: false, message: error.message })
   }
 };
@@ -43,14 +43,14 @@ const sendOTP = async (req, res) => {
 // verify the OTP received from the user 
 const verifyOTP = async (req, res) => {
   try {
-    console.log("Hi", req.body);
+    
     const { phone, enteredOTP } = req.body;
     // compare the OTP received from the user with the generated OTP
     const getOtp = await otpModel.findOne({ phone: phone })
     console.log("getOtp", getOtp);
     //MOMIN
     let userExist = await userModel.findOne({ phone }).select({ password: 0 })
-    console.log('userExist', userExist);
+    
     if (!userExist) return res.status(400).json({ status: false, message: 'Invalid Credentials' })
 
     if (getOtp.otp === enteredOTP) {
@@ -59,7 +59,6 @@ const verifyOTP = async (req, res) => {
         ...userExist._doc,
         token: generateToken(userExist._id)
       }
-      console.log('user', user);
 
       if (userExist) { //&& (await userExist.matchPassword(password))
         return res.status(200).json(user)
@@ -68,11 +67,11 @@ const verifyOTP = async (req, res) => {
         return res.status(400).json({ status: false, message: 'Invalid Credentials' })
       }
     } else {
-      return res.status(400).json({status:false, message: 'Invalid OTP' });
+      return res.status(400).json({ status: false, message: 'Invalid OTP' });
     }
 
   } catch (error) {
-    console.log(error.message);
+
     return res.status(500).send({ status: false, message: error.message })
   }
 };

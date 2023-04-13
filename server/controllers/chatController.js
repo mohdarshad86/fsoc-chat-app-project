@@ -39,7 +39,7 @@ const createChat = async (req, res) => {
             );
             return res.status(200).json(FullChat);
         } catch (error) {
-            console.log(error.message);
+
             return res.status(500).send({ status: false, message: error.message })
         }
     }
@@ -60,7 +60,7 @@ const getChats = async (req, res) => {
                 return res.status(200).send(results);
             });
     } catch (error) {
-        console.log(error.message);
+
         return res.status(500).send({ status: false, message: error.message })
     }
 };
@@ -92,7 +92,7 @@ const createGroup = async (req, res) => {
 
         return res.status(200).json(fullGroupChat);
     } catch (error) {
-        console.log(error.message);
+
         return res.status(500).send({ status: false, message: error.message })
     }
 };
@@ -111,7 +111,7 @@ const renameGroup = async (req, res) => {
             return res.status(200).json(newName);
         }
     } catch (error) {
-        console.log(error.message);
+
         return res.status(500).send({ status: false, message: error.message })
     }
 };
@@ -141,7 +141,7 @@ const addUsersToGroup = async (req, res) => {
             return res.status(200).json(addedUser);
         }
     } catch (error) {
-        console.log(error.message);
+
         return res.status(500).send({ status: false, message: error.message })
     }
 };
@@ -171,7 +171,7 @@ const removeUsersFromGroup = async (req, res) => {
             return res.status(200).json(removeUser);
         }
     } catch (error) {
-        console.log(error.message);
+
         return res.status(500).send({ status: false, message: error.message })
     }
 };

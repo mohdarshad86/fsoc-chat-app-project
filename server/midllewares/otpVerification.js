@@ -10,7 +10,7 @@ const sendOTP = async (req, res) => {
     const { phone } = req.body;
     let userExist = await userModel.findOne({ phone }).select({ password: 0 })
 
-    if (!userExist) return res.status(400).json({ status: false, msg: 'Invalid Credentials' })
+    if (!userExist) return res.status(400).json({ status: false, message: 'Invalid Credentials' })
 
     const otp = otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
 
@@ -47,7 +47,7 @@ const verifyOTP = async (req, res) => {
     //MOMIN
     let userExist = await userModel.findOne({ phone }).select({ password: 0 })
     console.log('userExist', userExist);
-    if (!userExist) return res.status(400).json({ status: false, msg: 'Invalid Credentials' })
+    if (!userExist) return res.status(400).json({ status: false, message: 'Invalid Credentials' })
 
     if (getOtp.otp === enteredOTP) {
 
@@ -61,7 +61,7 @@ const verifyOTP = async (req, res) => {
         return res.status(200).json(user)
       }
       else {
-        return res.status(400).json({ status: false, msg: 'Invalid Credentials' })
+        return res.status(400).json({ status: false, message: 'Invalid Credentials' })
       }
     } else {
       return res.status(400).json({ message: 'Invalid OTP' });

@@ -11,14 +11,10 @@ const Login = () => {
     const [otp, setOtp] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    // eslint-disable-next-line
     const [loading, setLoading] = useState(false);
 
     const [isOTPSend, setIsOTPSend] = useState(false);
-    const [error, setError] = useState({
-        status: false,
-        msg: "",
-        type: ""
-    })
 
     const history = useHistory();
 
@@ -26,23 +22,48 @@ const Login = () => {
         e.preventDefault();
 
         if (phone) {
-            const config = {
-                headers: {
-                    "Content-type": "application/json",
-                },
-            };
 
-            const { data } = await axios.post(
-                "/api/user/sendOTP",
-                { phone },
-                config
-            );
 
-            console.log(JSON.stringify(data));
-            setIsOTPSend(data.status);
+
+            try {
+                const config = {
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                };
+
+                const { data } = await axios.post(
+                    "/api/user/sendOTP",
+                    { phone },
+                    config
+                );
+
+                console.log(JSON.stringify(data));
+                setIsOTPSend(data.status);
+            } catch (error) {
+                toast({
+                    title: "Error Occured!",
+                    description: error.response.data.message,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom",
+                });
+                setLoading(false);
+            }
+
+
+
 
         } else {
-            setError({ status: true, msg: "Enter Valid Number", type: 'error' })
+            toast({
+                title: "Please Provide Phone Number!",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setLoading(false);
         }
     }
 
@@ -90,7 +111,14 @@ const Login = () => {
             }
 
         } else {
-            setError({ status: true, msg: "OTP Required", type: 'error' })
+            toast({
+                title: "Please Provide OTP!",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setLoading(false);
         }
     }
 
@@ -133,6 +161,7 @@ const Login = () => {
             await localStorage.setItem("userInfo", JSON.stringify(data));
             setLoading(false);
             history.push("/chats");
+            window.location.reload();
         } catch (error) {
             toast({
                 title: "Error Occured!",

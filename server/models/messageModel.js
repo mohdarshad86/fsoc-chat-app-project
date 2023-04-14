@@ -14,6 +14,10 @@ const messageSchema = new mongoose.Schema({
         type: ObjectId,
         ref: "chat"
     },
+    files: {
+        type: String,
+        trim: true
+    },
     readBy:
         [{
             type: ObjectId,

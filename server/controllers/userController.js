@@ -6,17 +6,17 @@ const register = async (req, res) => {
         const data = req.body
         const { name, phone, email, password, pic } = data
 
-        if (!name || !phone || !email || !password) 
-            return res.status(400).send("Please send all the require field")       
+        if (!name || !phone || !email || !password)
+            return res.status(400).send({ status: false, message: "Please send all the require field" })
 
-        const userExist = await userModel.findOne({ email: data.email })
-
-        if (userExist) return res.status(400).send({ status: false, msg: 'User Already exist, LogIn Please!' })
+        const userExist = await userModel.findOne({ $or: [{ email: email }, { phone: phone }] })
+        
+        if (userExist) return res.status(400).send({ status: false, message: 'User Already exist, LogIn Please!' })
 
         const newUser = await userModel.create(data)
 
         if (!newUser) {
-            return res.status(400).send({ status: false, msg: 'Failed to create the User' })
+            return res.status(400).send({ status: false, message: 'Failed to create the User' })
         }
 
         let user = {
@@ -26,7 +26,7 @@ const register = async (req, res) => {
         return res.status(201).json(user)
     } catch (error) {
         console.log(error.message);
-        return res.status(500).send({ status: false, msg: error.message })
+        return res.status(500).send({ status: false, message: error.message })
     }
 }
 
@@ -37,7 +37,7 @@ const Login = async (req, res) => {
 
         let userExist = await userModel.findOne({ email }).select({ password: 0 })
 
-        if (!userExist) return res.status(400).json({ status: false, msg: 'Invalid Credentials' })
+        if (!userExist) return res.status(400).json({ status: false, message: 'Invalid Credentials' })
 
         let user = {
             ...userExist._doc,
@@ -48,11 +48,11 @@ const Login = async (req, res) => {
             return res.status(200).json(user)
         }
         else {
-            return res.status(400).json({ status: false, msg: 'Invalid Credentials' })
+            return res.status(400).json({ status: false, message: 'Invalid Credentials' })
         }
 
     } catch (error) {
-        return res.status(500).send({ status: false, msg: error.message })
+        return res.status(500).send({ status: false, message: error.message })
     }
 }
 
@@ -70,7 +70,7 @@ const allUsers = async (req, res) => {
 
         return res.status(200).send(users)
     } catch (error) {
-        return res.status(500).send({ status: false, msg: error.message })
+        return res.status(500).send({ status: false, message: error.message })
     }
 }
 

@@ -3,9 +3,9 @@ const messageModel = require('../models/messageModel');
 const userModel = require('../models/userModel');
 
 const sendMessage = async (req, res) => {
-    const { content, chatId } = req.body
-
-    if (!content || !chatId)
+    const { content, chatId, files } = req.body
+    console.log(req.body);
+    if (!(content || files) || !chatId)
         return res.status(400).send("Invalid data passed into request");
 
     var newMessage = {
@@ -14,18 +14,19 @@ const sendMessage = async (req, res) => {
         //content from frontend typed message
         content: content,
         //chatId from frontend fetched data
-        chat: chatId
+        chat: chatId,
+        files: files
     }
 
     try {
         var message = await messageModel.create(newMessage)
 
         //
-        message = await message.populate('sender', 'name pic')
+        message = await message.populate('sender', 'name pic files')
         message = await message.populate('chat')
         message = await userModel.populate(message, {
             path: "chat.user",
-            select: "name pic email"
+            select: "name pic email files"
         })
 
         await chatModel.findByIdAndUpdate(chatId, {

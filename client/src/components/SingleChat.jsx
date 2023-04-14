@@ -1,10 +1,10 @@
 import { FormControl } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
-import "../App.css";
-import { IconButton, Spinner, useToast } from "@chakra-ui/react";
+import { Button, IconButton, Spinner, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import "../App.css";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModal from "./Miscellaneous/ProfileModal";
@@ -25,7 +25,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
+  const [pic, setPic] = useState()
+  const [picLoading, setPicLoading] = useState(false);
+  const inputFileRef = useRef()
   const toast = useToast();
+
+
 
   const defaultOptions = {
     loop: true,
@@ -71,7 +76,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const sendMessage = async (event) => {
-    if (event.key === "Enter" && newMessage) {
+    if (event.key === "Enter" && (newMessage || pic)) {
       socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
@@ -81,11 +86,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
         };
         setNewMessage("");
+        setPic('')
         const { data } = await axios.post(
           "/api/message",
           {
             content: newMessage,
             chatId: selectedChat,
+            files: pic,
           },
           config
         );
@@ -158,6 +165,55 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }, timerLength);
   };
+
+  const uploadFiles = (pics) => {
+    setPicLoading(true);
+    if (pics === undefined) {
+      toast({
+        title: "Please Select an Image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+    console.log(pics);
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "mern-chat-app");
+      data.append("cloud_name", "ddkfsxabf");
+      fetch("https://api.cloudinary.com/v1_1/ddkfsxabf/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPic(data.url.toString());
+          console.log(data.url.toString());
+          setPicLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setPicLoading(false);
+        });
+    } else {
+      toast({
+        title: "Please Select an Image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+      return;
+    }
+  }
+
+  const selectImage = () => {
+    inputFileRef.current.click();
+  }
 
   return (
     <>
@@ -240,13 +296,32 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ) : (
                 <></>
               )}
-              <Input
-                variant="filled"
-                bg="#E0E0E0"
-                placeholder="Enter a message.."
-                value={newMessage}
-                onChange={typingHandler}
-              />
+              {pic &&
+                <img width='120px' display='block' src={pic} alt="" />
+              }<InputGroup>
+
+                <Input
+                  variant="filled"
+                  bg="#E0E0E0"
+                  placeholder="Enter a message.."
+                  value={newMessage}
+                  onChange={typingHandler}
+                />
+
+                <InputRightElement width='4.5rem'>
+                  <Button size='md' colorScheme='red' onClick={selectImage}>
+                    Files
+                  </Button>
+                  <Input type='file'
+                    ref={inputFileRef}
+                    display='none'
+                    accept='image/*'
+                    onChange={(e) => uploadFiles(e.target.files[0])}
+                  />
+                </InputRightElement>
+
+
+              </InputGroup>
             </FormControl>
           </Box>
         </>

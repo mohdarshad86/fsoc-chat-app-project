@@ -15,7 +15,8 @@ import animationData from "../Animations/typing.json";
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./Miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
-const ENDPOINT = "https://chatappbackend-uqkv.onrender.com";
+// const ENDPOINT = "https://chatappbackend-uqkv.onrender.com";
+const ENDPOINT = "http://localhost:3001"
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -179,7 +180,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       });
       return;
     }
-    
+
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);

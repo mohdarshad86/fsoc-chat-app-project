@@ -13,6 +13,7 @@ const Homepage = () => {
 
     if (user) {
       history.push('/chats')
+      window.location.reload();
       // history.push('/')
     }
 

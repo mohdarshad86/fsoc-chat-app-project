@@ -40,6 +40,7 @@ const SignUp = () => {
                 isClosable: true,
                 position: "bottom",
             });
+            setPicLoading(false);
             return;
         }
         try {

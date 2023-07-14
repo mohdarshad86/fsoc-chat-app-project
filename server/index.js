@@ -1,31 +1,24 @@
-const { Router } = require('express');
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors')
-const colors = require('colors')
+require('colors')
+require('dotenv').config()
 const route = require('./routes/route');
-const { notFound, errorHandler } = require('./midllewares/errors')
 
 const PORT = process.env.PORT || 3001
-
-// app.use(cors())
 
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
 // Connection();
-mongoose.connect("mongodb+srv://mohdarshad86:Arshad86@cluster0.r4p7rwf.mongodb.net/fsoc-chatApp-DB")
+mongoose.connect(process.env.DB_CLUSTER)
   .then(() => { console.log("MongoDB is connected".cyan.underline) })
   .catch((err) => { console.log(`Error:${err.message}`.red.bold) });
 
 app.use(cors())
 
-
 app.use("/", route);
-
-// app.use(notFound)
-// app.use(errorHandler)
 
 const server = app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`.yellow.bold);
@@ -34,7 +27,7 @@ const server = app.listen(PORT, () => {
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.IO_ORIGIN,
     // credentials: true,
   },
 });
@@ -59,9 +52,9 @@ io.on("connection", (socket) => {
     if (!chat.users) {
       return console.log("chat.users not defined");
     }
-    
+
     chat.users.forEach((user) => {
-      
+
       if (user == newMessageRecieved.sender._id) return;
 
       socket.in(user).emit("message recieved", newMessageRecieved);

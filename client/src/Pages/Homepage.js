@@ -30,7 +30,7 @@ const Homepage = () => {
       borderRadius="1g"
       borderWidth="1px"
     >
-      <Text fontSize="4xl" fontFamily="work sans" color="black">Chat App</Text>
+      <Text fontSize="4xl" fontWeight='bold' fontFamily="work sans" color="black" marginLeft="160px">Chat App</Text>
     </Box>
     <Box bg='white' w='100%' p={4} borderRadius='1g' borderWidth='1px'>
       <Tabs variant='soft-rounded' colorScheme='green'>

@@ -12,6 +12,8 @@ router.post('/api/user', userController.register)
 router.post('/api/user/login', userController.Login)
 //GET ALL USER
 router.get('/api/users', authorise.auth, userController.allUsers)
+//UPADTE USER
+router.put('/api/user', authorise.auth, userController.updateUser)
 
 // chat
 //ACCESS CHAT

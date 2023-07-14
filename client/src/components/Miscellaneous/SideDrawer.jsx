@@ -181,7 +181,7 @@ function SideDrawer() {
               />
             </MenuButton>
             <MenuList>
-              <ProfileModal user={user}>
+              <ProfileModal user={user} isMe={true}>
                 <MenuItem>My Profile</MenuItem>{" "}
               </ProfileModal>
               <MenuDivider />

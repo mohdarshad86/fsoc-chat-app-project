@@ -13,8 +13,9 @@ import {
   Text,
   Image,
 } from "@chakra-ui/react";
+import EditModal from "./EditProfile";
 
-const ProfileModal = ({ user, children }) => {
+const ProfileModal = ({ user, children, isMe = false }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -55,7 +56,12 @@ const ProfileModal = ({ user, children }) => {
               Email: {user.email}
             </Text>
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter display="flex" justifyContent="space-between" >
+            {isMe &&
+              <EditModal user={user}>
+                <Button mb="2">Edit Your Profile</Button>
+              </EditModal>
+            }
             <Button onClick={onClose}>Close</Button>
           </ModalFooter>
         </ModalContent>

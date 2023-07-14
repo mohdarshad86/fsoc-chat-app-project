@@ -43,6 +43,7 @@ const register = async (req, res) => {
 
 const Login = async (req, res) => {
     try {
+        console.log(req)
         let data = req.body
         let { email, password } = data
 
@@ -92,4 +93,27 @@ const allUsers = async (req, res) => {
     }
 }
 
-module.exports = { register, Login, allUsers }
+const updateUser = async (req, res) => {
+    try {
+        const { pic, name } = req.body
+
+        if (!pic && !name) return res.status(400).json({ status: false, message: 'Please send data to Update' })
+
+        const obj = {}
+        if (pic) obj.pic = pic
+        if (name) obj.name = name
+
+        const updatedUser = await userModel.findByIdAndUpdate(req.user._id,
+            {
+                $set: obj
+            }
+            , { new: true }
+        )
+
+        return res.status(200).send(updatedUser)
+    } catch (error) {
+        return res.status(500).send({ status: false, message: error.message })
+    }
+}
+
+module.exports = { register, Login, allUsers, updateUser }
